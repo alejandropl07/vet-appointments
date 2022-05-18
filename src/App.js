@@ -1,4 +1,5 @@
 import React, { useState, Fragment } from "react";
+import Appointment from "./components/Appointment";
 import Form from "./components/Form";
 
 function App() {
@@ -17,7 +18,15 @@ function App() {
           <div className="one-half  column">
             <Form createAppointment={createAppointment} />
           </div>
-          <div className="one-half  column"></div>
+          <div className="one-half  column">
+            {appointments.map((appointment, index) => (
+              <Appointment
+                key={index}
+                index={index}
+                appointment={appointment}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </Fragment>
