@@ -1,13 +1,16 @@
 import React, { Fragment, useState } from "react";
 
 function Form({ createAppointment }) {
-  const [appointment, updateAppointment] = useState({
+  const initialState = {
     mascot: "",
     owner: "",
     date: "",
     time: "",
     symptom: "",
-  });
+  };
+
+  const [appointment, updateAppointment] = useState(initialState);
+  const [error, updateError] = useState(false);
 
   const updateState = (e) => {
     updateAppointment({
@@ -18,8 +21,22 @@ function Form({ createAppointment }) {
 
   const sendAppointment = (e) => {
     e.preventDefault();
+    if (
+      appointment.mascot === "" ||
+      appointment.owner === "" ||
+      appointment.date === "" ||
+      appointment.time === "" ||
+      appointment.symptom === ""
+    ) {
+      updateError(true);
+      return;
+    } else {
+      updateError(false);
+      createAppointment(appointment);
+      updateAppointment(initialState);
+    }
     createAppointment(appointment);
-    console.log(appointment);
+    updateAppointment(initialState);
   };
 
   return (
@@ -34,6 +51,7 @@ function Form({ createAppointment }) {
           className="u-full-width"
           placeholder="Mascot name"
           onChange={updateState}
+          value={appointment.mascot}
         />
 
         <label>Owner name</label>
@@ -43,6 +61,7 @@ function Form({ createAppointment }) {
           className="u-full-width"
           placeholder="Owner name"
           onChange={updateState}
+          value={appointment.owner}
         />
 
         <label>Date</label>
@@ -51,6 +70,7 @@ function Form({ createAppointment }) {
           className="u-full-width"
           name="date"
           onChange={updateState}
+          value={appointment.date}
         />
 
         <label>Time</label>
@@ -59,6 +79,7 @@ function Form({ createAppointment }) {
           className="u-full-width"
           name="time"
           onChange={updateState}
+          value={appointment.time}
         />
 
         <label>Symptom</label>
@@ -66,12 +87,14 @@ function Form({ createAppointment }) {
           className="u-full-width"
           name="symptom"
           onChange={updateState}
+          value={appointment.symptom}
         ></textarea>
 
         <button type="submit" className="button-primary u-full-width">
           Add
         </button>
       </form>
+      {error  ? <div  className="button button-primary u-full-width">Empty fields</div>  : null}
     </Fragment>
   );
 }
